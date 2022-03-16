@@ -1,0 +1,16 @@
+services:
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - 9000:27017
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: petworld-api
+    depends_on:
+      - mongo
+    ports:
+      - 8080:8080

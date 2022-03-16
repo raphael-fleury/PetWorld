@@ -9,6 +9,8 @@ const app = express();
 
 mongo.connect().then(() =>
     console.log("Connected to Mongo at " + mongo.uri)
+).catch((error) =>
+    console.error("Error on connecting to Mongo\n" + error.message)
 );
 
 app.use(bodyParser.urlencoded({ extended: false }));
