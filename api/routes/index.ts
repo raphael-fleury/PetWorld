@@ -4,7 +4,10 @@ import fs = require('fs');
 const files = fs.readdirSync(__dirname).filter(file => !file.includes('index'));
 
 const useRoute = (app: Application, file: string) => {
-    import(`./${file.replace('.js', '')}`).then((x) => x.default(app));
+    import(`./${file.replace('.js', '')}`).then((x) => {
+        const { uri, router } = x.default;
+        app.use(uri, router);
+    });
 }
 
 const useRoutes = (app: Application) => {
