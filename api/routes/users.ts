@@ -1,9 +1,8 @@
 import asyncRouter from "../async-router"
-import catchErrors from "../middlewares/catch-errors";
 import { userSchema } from "../entities/schemas"
 
 const uri = '/users';
-const router = asyncRouter;
+const router = asyncRouter();
 
 router.get('/', async (req, res) => {
     const users = await userSchema.find();
@@ -44,5 +43,4 @@ router.delete('/:id', async (req, res) => {
     res.status(200).send(user);
 })
 
-catchErrors(router);
 export default { uri, router };
