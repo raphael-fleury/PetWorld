@@ -1,87 +1,48 @@
-import express from "express"
+import asyncRouter from "../async-router"
+import catchErrors from "../middlewares/catch-errors";
 import { userSchema } from "../entities/schemas"
 
 const uri = '/users';
-const router = express.Router();
-
-function treatValidationError(error) {
-    const errors: any[] = [];
-
-    Object.keys(error.errors).forEach(key => {
-        errors.push(error.errors[key].properties);
-    })
-
-    return errors;
-}
+const router = asyncRouter;
 
 router.get('/', async (req, res) => {
-    try {
-        const users = await userSchema.find();
-        res.status(200).send(users);
-    }
-    catch (error: any) {
-        res.status(500).send(error.message);
-    }
+    const users = await userSchema.find();
+    res.status(200).send(users);
 })
 
 router.get('/:id', async (req, res) => {
-    try {
-        const user = await userSchema.findById(req.params.id);
-        if (!user)
-            return res.status(404).send('User not found.');
+    const user = await userSchema.findById(req.params.id);
+    if (!user)
+        return res.status(404).send('Resource not found.');
 
-        res.status(200).send(user);
-    }
-    catch (error: any) {
-        res.status(500).send(error.message);
-    }
+    res.status(200).send(user);
 })
 
 router.post('/', async (req, res) => {
-    try {
-        const user = await userSchema.create(req.body);
-        res.status(200).send(user);
-    }
-    catch (error: any) {
-        if (error.name === "ValidationError")
-            return res.status(400).send(treatValidationError(error));
-
-        res.status(500).send(error.message);
-    }
+    const user = await userSchema.create(req.body);
+    res.status(200).send(user);
 })
 
 router.patch('/:id', async (req, res) => {
-    try {
-        const user = await userSchema.findById(req.params.id);
-        if (!user)
-            return res.status(404).send('User not found.');
+    const user = await userSchema.findById(req.params.id);
+    if (!user)
+        return res.status(404).send('Resource not found.');
 
-        Object.keys(req.body).forEach(key => {
-            user[key] = req.body[key];
-        });
-        
-        await user.save();
-        res.status(200).send(user);
-    }
-    catch (error: any) {
-        if (error.name === "ValidationError")
-            return res.status(400).send(treatValidationError(error));
-
-        res.status(500).send(error.message);
-    }
+    Object.keys(req.body).forEach(key => {
+        user[key] = req.body[key];
+    });
+    
+    await user.save();
+    res.status(200).send(user);
 })
 
 router.delete('/:id', async (req, res) => {
-    try {
-        const user = await userSchema.findByIdAndDelete(req.params.id);
-        if (!user)
-            return res.status(404).send('User not found.');
+    const user = await userSchema.findByIdAndDelete(req.params.id);
+    if (!user)
+        return res.status(404).send('Resource not found.');
 
-        res.status(200).send(user);
-    }
-    catch (error: any) {
-        res.status(500).send(error.message);
-    }
+    res.status(200).send(user);
 })
 
-export default { uri, router};
+catchErrors(router);
+export default { uri, router };

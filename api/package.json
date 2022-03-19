@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@typegoose/typegoose": "^9.7.0",
+    "async-express-decorator": "^1.1.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
     "express": "^4.17.3",
