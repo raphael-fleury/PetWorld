@@ -1,4 +1,3 @@
-import User from "entities/user";
 import { Application } from "express"
 import { userSchema } from "../entities/schemas"
 
@@ -13,6 +12,29 @@ function treatValidationError(error) {
 }
 
 export default (app: Application) => {
+    app.get('/users', async (req, res) => {
+        try {
+            const users = await userSchema.find();
+            res.status(200).send(users);
+        }
+        catch (error: any) {
+            res.status(500).send(error.message);
+        }
+    })
+
+    app.get('/users/:id', async (req, res) => {
+        try {
+            const user = await userSchema.findById(req.params.id);
+            if (!user)
+                return res.status(404).send('User not found.');
+
+            res.status(200).send(user);
+        }
+        catch (error: any) {
+            res.status(500).send(error.message);
+        }
+    })
+
     app.post('/users', async (req, res) => {
         try {
             const user = await userSchema.create(req.body);
@@ -26,7 +48,7 @@ export default (app: Application) => {
         }
     })
     
-    app.put('/users/:id', async (req, res) => {
+    app.patch('/users/:id', async (req, res) => {
         try {
             const user = await userSchema.findById(req.params.id);
             if (!user)
@@ -43,6 +65,19 @@ export default (app: Application) => {
             if (error.name === "ValidationError")
                 return res.status(400).send(treatValidationError(error));
 
+            res.status(500).send(error.message);
+        }
+    })
+
+    app.delete('/users/:id', async (req, res) => {
+        try {
+            const user = await userSchema.findByIdAndDelete(req.params.id);
+            if (!user)
+                return res.status(404).send('User not found.');
+
+            res.status(200).send(user);
+        }
+        catch (error: any) {
             res.status(500).send(error.message);
         }
     })
