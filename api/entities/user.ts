@@ -1,7 +1,10 @@
 import validator from "validator";
-import { prop } from "@typegoose/typegoose";
+import { pre, prop } from "@typegoose/typegoose";
 import { encrypt } from "../encrypt";
 
+@pre<User>('save', function() {
+    this.password = encrypt(this.password);
+})
 export default class User {
     @prop({ required: true })
     public name!: string
@@ -16,7 +19,6 @@ export default class User {
     @prop({
         required: true,
         minlength: [ 8, "Password must be at least 8 characters long"],
-        set: encrypt
     })
     public password!: string
 }
