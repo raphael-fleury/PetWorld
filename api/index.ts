@@ -1,5 +1,5 @@
-import app from "./server";
-import mongo from "./mongo";
+import app from "./src/server";
+import mongo from "./src/mongo";
 
 const port = process.env.PORT || 3000;
 

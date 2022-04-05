@@ -1,6 +1,6 @@
 import validator from "validator";
 import { pre, prop } from "@typegoose/typegoose";
-import { encrypt } from "../encrypt";
+import { encrypt } from "../util/encrypt";
 
 @pre<User>('save', function() {
     this.password = encrypt(this.password);

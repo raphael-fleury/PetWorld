@@ -1,4 +1,4 @@
-import asyncRouter from "../async-router"
+import asyncRouter from "../util/async-router"
 import { userSchema } from "../entities/schemas"
 
 const uri = '/users';
