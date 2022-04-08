@@ -6,12 +6,12 @@ services:
       - 9000:27017
 
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
+    build: .
     image: petworld-api
     depends_on:
       - mongo
     ports:
       - 8080:8080
-    command: npm run start
+    volumes:
+      - ./:/usr/src/app
+    command: npm run dev

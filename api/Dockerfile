@@ -9,4 +9,3 @@ ENV MONGO_URL=mongo
 
 COPY . .
 EXPOSE $PORT
-CMD npm run start
