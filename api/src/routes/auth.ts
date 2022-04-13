@@ -1,4 +1,4 @@
-import { userSchema } from "../entities/schemas"
+import { userModel } from "../entities/models"
 import { createToken } from "../services/token";
 import { Router } from "express";
 import bcrypt from "bcrypt";
@@ -13,7 +13,7 @@ function useRoutes(router: Router) {
             return res.status(404).send("User not found.")
         }
     
-        const user = await userSchema.findOne({ email });
+        const user = await userModel.findOne({ email });
     
         if (!user || !bcrypt.compareSync(password, user.password)) {
             return res.status(404).send("User not found.")

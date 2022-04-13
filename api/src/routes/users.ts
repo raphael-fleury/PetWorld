@@ -1,16 +1,16 @@
-import { userSchema } from "../entities/schemas"
+import { userModel } from "../entities/models"
 import { Router } from "express";
 
 const uri = '/users';
 
 function useRoutes(router: Router) {
     router.get('/', async (req, res) => {
-        const users = await userSchema.find();
+        const users = await userModel.find();
         res.status(200).send(users);
     })
     
     router.get('/:id', async (req, res) => {
-        const user = await userSchema.findById(req.params.id);
+        const user = await userModel.findById(req.params.id);
         if (!user)
             return res.status(404).send('Resource not found.');
     
@@ -18,12 +18,12 @@ function useRoutes(router: Router) {
     })
     
     router.post('/', async (req, res) => {
-        const user = await userSchema.create(req.body);
+        const user = await userModel.create(req.body);
         res.status(200).send(user);
     })
     
     router.patch('/:id', async (req, res) => {
-        const user = await userSchema.findById(req.params.id);
+        const user = await userModel.findById(req.params.id);
         if (!user)
             return res.status(404).send('Resource not found.');
     
@@ -36,7 +36,7 @@ function useRoutes(router: Router) {
     })
     
     router.delete('/:id', async (req, res) => {
-        const user = await userSchema.findByIdAndDelete(req.params.id);
+        const user = await userModel.findByIdAndDelete(req.params.id);
         if (!user)
             return res.status(404).send('Resource not found.');
     

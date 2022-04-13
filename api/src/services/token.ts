@@ -1,4 +1,4 @@
-import { userSchema } from "../entities/schemas";
+import { userModel } from "../entities/models";
 import jwt from "jsonwebtoken";
 
 const secret = "HAHAHAHAHAHAHAHA";
@@ -14,7 +14,7 @@ async function getUserFromToken(token: string) {
     const payload = jwt.decode(token);
     if (!payload || !payload['user']) { return }
 
-    const user = await userSchema.findById(payload['user']);
+    const user = await userModel.findById(payload['user']);
     if (!user) { return }
 
     return user;
