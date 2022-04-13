@@ -1,5 +1,5 @@
 import { userModel } from "../entities/models"
-import { createToken } from "../services/token";
+import { createToken } from "../services/token.service";
 import { Router } from "express";
 import bcrypt from "bcrypt";
 

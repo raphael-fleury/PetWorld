@@ -1,10 +1,10 @@
 import { Application, Router } from "express";
 import asyncRouter from "../util/async-router"
-import catchErrors from "../middlewares/catch-errors";
-import useAuthentication from "../middlewares/authentication";
+import catchErrors from "../middlewares/catch-errors.middleware";
+import useAuthentication from "../middlewares/authentication.middleware";
 import fs = require('fs');
 
-const files = fs.readdirSync(__dirname).filter(file => !file.includes('index'));
+const files = fs.readdirSync(__dirname).filter(file => file.includes('.routes'));
 
 function usePreMiddlewares(router: Router) {
     useAuthentication(router);

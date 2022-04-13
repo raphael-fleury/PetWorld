@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserFromToken, isTokenExpired } from "../services/token";
+import { getUserFromToken, isTokenExpired } from "../services/token.service";
 
 export default (router: Router) => {
     router.use(async (req, res, next) => {
