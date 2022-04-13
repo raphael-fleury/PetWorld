@@ -1,4 +1,5 @@
 import { Router } from "express";
+import NotFoundError from "../services/errors/not-found.error";
 
 function treatValidationError(error) {
     const errors: any[] = [];
@@ -20,6 +21,9 @@ function treatDuplicateKeyError(error) {
 
 export default (router: Router) => {
     router.use((error, req, res, next) => {
+        if (error instanceof NotFoundError)
+            return res.status(404).send(error.message);
+
         if (error.name === "ValidationError")
             return res.status(400).send(treatValidationError(error));
 
