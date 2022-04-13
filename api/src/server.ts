@@ -1,7 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-
-import { useRoutes } from "./routes";
+import { useRouters } from "./routes";
 
 const app = express();
 
@@ -12,6 +11,6 @@ app.get('/', (req, res) => {
     res.status(200).send('Hello world.');
 })
 
-useRoutes(app);
+useRouters(app);
 
 export default app;

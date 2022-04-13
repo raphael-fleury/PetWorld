@@ -1,3 +1,5 @@
+import { Router } from "express";
+
 function treatValidationError(error) {
     const errors: any[] = [];
 
@@ -16,7 +18,7 @@ function treatDuplicateKeyError(error) {
     return [{ path, value, message }]
 }
 
-export default (router) => {
+export default (router: Router) => {
     router.use((error, req, res, next) => {
         if (error.name === "ValidationError")
             return res.status(400).send(treatValidationError(error));
