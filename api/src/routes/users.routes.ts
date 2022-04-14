@@ -1,47 +1,40 @@
-import { userModel } from "../entities/models"
+import { find, findById, create, edit, deleteById } from "../services/user.service";
 import { Router } from "express";
+import User from "../entities/user";
 
 const uri = '/users';
 
 function useRoutes(router: Router) {
     router.get('/', async (req, res) => {
-        const users = await userModel.find();
-        res.status(200).send(users);
+        const users = await find(req.query);
+        res.status(200).send(users.map(sanitize));
     })
     
     router.get('/:id', async (req, res) => {
-        const user = await userModel.findById(req.params.id);
-        if (!user)
-            return res.status(404).send('Resource not found.');
-    
-        res.status(200).send(user);
+        const user = await findById(req.params.id);
+        res.status(200).send(sanitize(user));
     })
     
     router.post('/', async (req, res) => {
-        const user = await userModel.create(req.body);
-        res.status(200).send(user);
+        const user = await create(req.body);
+        res.status(200).send(sanitize(user));
     })
     
     router.patch('/:id', async (req, res) => {
-        const user = await userModel.findById(req.params.id);
-        if (!user)
-            return res.status(404).send('Resource not found.');
-    
-        Object.keys(req.body).forEach(key => {
-            user[key] = req.body[key];
-        });
-        
-        await user.save();
-        res.status(200).send(user);
+        const user = await edit(req.params.id, req.body);
+        res.status(200).send(sanitize(user));
     })
     
-    router.delete('/:id', async (req, res) => {
-        const user = await userModel.findByIdAndDelete(req.params.id);
-        if (!user)
-            return res.status(404).send('Resource not found.');
-    
-        res.status(200).send(user);
+    router.delete('/:id', async (req, res, next) => {
+        const user = await deleteById(req.params.id);
+        res.status(200).send(sanitize(user));
     })
+}
+
+function sanitize(user: Omit<User, "password">) {
+    delete user['password'];
+    delete user['__v'];
+    return user;
 }
 
 export default { uri, useRoutes };
