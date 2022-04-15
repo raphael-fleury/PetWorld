@@ -6,36 +6,38 @@ type PartialUser = {
     [P in keyof User]?: User[P];
 }
 
-export async function find(filter: PartialUser) {
-    return await userModel.find(filter).lean();
-}
-
-export async function findById(id: string) {
-    const user = await userModel.findById(id).lean();
-    if (!user) { throw new NotFoundError("User not found.") }
-
-    return user;
-}
-
-export async function create(payload: User) {
-    const user = await userModel.create(payload);
-    return user.toObject();
-}
-
-export async function edit(id: string, payload: PartialUser) {
-    const user = await userModel.findById(id);
-    if (!user) { throw new NotFoundError("User not found.") }
-
-    Object.keys(payload).forEach(key => {
-        user[key] = payload[key];
-    });
-
-    return (await user.save()).toObject();
-}
-
-export async function deleteById(id: string) {
-    const user = await userModel.findByIdAndDelete(id).lean();
-    if (!user) { throw new NotFoundError("User not found.") }
-
-    return user;
+export default {
+    async find(filter: PartialUser): Promise<User[]> {
+        return await userModel.find(filter).lean();
+    },
+    
+    async findById(id: string): Promise<User> {
+        const user = await userModel.findById(id).lean();
+        if (!user) { throw new NotFoundError("User not found.") }
+    
+        return user;
+    },
+    
+    async create(payload: User): Promise<User> {
+        const user = await userModel.create(payload);
+        return user.toObject();
+    },
+    
+    async edit(id: string, payload: PartialUser): Promise<User> {
+        const user = await userModel.findById(id);
+        if (!user) { throw new NotFoundError("User not found.") }
+    
+        Object.keys(payload).forEach(key => {
+            user[key] = payload[key];
+        });
+    
+        return (await user.save()).toObject();
+    },
+    
+    async deleteById(id: string): Promise<User> {
+        const user = await userModel.findByIdAndDelete(id).lean();
+        if (!user) { throw new NotFoundError("User not found.") }
+    
+        return user;
+    }
 }
