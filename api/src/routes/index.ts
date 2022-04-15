@@ -1,35 +1,32 @@
-import { Application, Router } from "express";
+import { Application } from "express";
+import { usePreMiddlewares, usePostMiddlewares } from "../middlewares";
 import asyncRouter from "../util/async-router"
-import catchErrors from "../middlewares/catch-errors.middleware";
-import useAuthentication from "../middlewares/authentication.middleware";
 import fs = require('fs');
+
+type Controller = {
+    uri: string,
+    useRoutes: (Router) => void;
+}
 
 const files = fs.readdirSync(__dirname).filter(file => file.includes('.routes'));
 
-function usePreMiddlewares(router: Router) {
-    useAuthentication(router);
+async function getController(file: string) {
+    const module = await import(`./${file.replace('.js', '')}`);
+    return module.default as Controller;
 }
 
-function usePostMiddlewares(router: Router) {
-    catchErrors(router);
+const useControllers = (app: Application) => {
+    files.forEach(file => {
+        getController(file).then(({ uri, useRoutes }) => {
+            const router = asyncRouter();
+    
+            usePreMiddlewares(router);
+            useRoutes(router);
+            usePostMiddlewares(router);
+            
+            app.use(uri, router);
+        })
+    })
 }
 
-const useRouter = (app: Application, file: string) => {
-    import(`./${file.replace('.js', '')}`).then((x) => {
-        const router = asyncRouter();
-        const { uri, useRoutes } = x.default;
-
-        usePreMiddlewares(router);
-        useRoutes(router);
-        usePostMiddlewares(router);
-        
-        app.use(uri, router);
-    });
-}
-
-const useRouters = (app: Application) => {
-    files.forEach(file => useRouter(app, file))
-    return app;
-}
-
-export { files, useRouters }
+export { files, useControllers }

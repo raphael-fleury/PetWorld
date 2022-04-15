@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { useRouters } from "./routes";
+import { useControllers } from "./routes";
 
 const app = express();
 
@@ -11,6 +11,6 @@ app.get('/', (req, res) => {
     res.status(200).send('Hello world.');
 })
 
-useRouters(app);
+useControllers(app);
 
 export default app;
