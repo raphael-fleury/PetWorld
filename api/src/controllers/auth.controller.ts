@@ -1,19 +1,23 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
+import { AuthService } from "../services/auth.service";
 import authService from "../services/auth.service";
 
-const uri = '/';
+export class AuthController {
+    readonly uri = '/';
 
-function useRoutes(
-    router: Router,
-    service: typeof authService = authService
-) {
-    router.post('/login', async (req, res) => {
+    constructor(private service: AuthService) { }
+
+    useRoutes = (router: Router) => {
+        router.post('/login', this.login);
+    }
+
+    login = async (req: Request, res: Response) => {
         const email = "" + req.body.email;
         const password = "" + req.body.password;
 
-        const token = await service.login(email, password);
+        const token = await this.service.login(email, password);
         return res.status(200).send(token);
-    })
+    }
 }
 
-export default { uri, useRoutes };
+export default new AuthController(authService);
