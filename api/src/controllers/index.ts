@@ -8,7 +8,7 @@ type Controller = {
     useRoutes: (Router) => void;
 }
 
-const files = fs.readdirSync(__dirname).filter(file => file.includes('.routes'));
+const files = fs.readdirSync(__dirname).filter(file => file.includes('.controller'));
 
 async function getController(file: string) {
     const module = await import(`./${file.replace('.js', '')}`);

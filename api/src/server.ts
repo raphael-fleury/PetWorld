@@ -1,4 +1,4 @@
-import { useControllers } from "./routes";
+import { useControllers } from "./controllers";
 import { createExpressApp } from "./util/express-app";
 
 const app = createExpressApp();
