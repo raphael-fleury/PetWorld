@@ -15,16 +15,18 @@ async function getController(file: string) {
     return module.default as Controller;
 }
 
+export function useController(app: Application, { uri, useRoutes }: Controller) {
+    const router = asyncRouter();
+
+    usePreMiddlewares(router);
+    useRoutes(router);
+    usePostMiddlewares(router);
+
+    app.use(uri, router);
+}
+
 export const useControllers = (app: Application) => {
-    files.forEach(file => {
-        getController(file).then(({ uri, useRoutes }) => {
-            const router = asyncRouter();
-    
-            usePreMiddlewares(router);
-            useRoutes(router);
-            usePostMiddlewares(router);
-            
-            app.use(uri, router);
-        })
+    files.map(getController).forEach(promise => {
+        promise.then(ctlr => useController(app, ctlr))
     })
 }
