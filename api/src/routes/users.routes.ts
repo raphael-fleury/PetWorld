@@ -1,12 +1,13 @@
+import { Router } from "express";
+import { UserService } from "../services/user.service";
 import userService from "../services/user.service";
 import User from "../entities/user";
-import { Router } from "express";
 
 const uri = '/users';
 
 function useRoutes(
     router: Router,
-    service: typeof userService = userService
+    service: UserService = userService
 ) {
     router.get('/', async (req, res) => {
         const users = await service.find(req.query);

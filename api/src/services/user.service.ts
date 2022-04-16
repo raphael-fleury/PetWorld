@@ -6,22 +6,22 @@ type PartialUser = {
     [P in keyof User]?: User[P];
 }
 
-export default {
+export class UserService {
     async find(filter: PartialUser): Promise<User[]> {
         return await userModel.find(filter).lean();
-    },
+    }
     
     async findById(id: string): Promise<User> {
         const user = await userModel.findById(id).lean();
         if (!user) { throw new NotFoundError("User not found.") }
     
         return user;
-    },
+    }
     
     async create(payload: User): Promise<User> {
         const user = await userModel.create(payload);
         return user.toObject();
-    },
+    }
     
     async edit(id: string, payload: PartialUser): Promise<User> {
         const user = await userModel.findById(id);
@@ -32,7 +32,7 @@ export default {
         });
     
         return (await user.save()).toObject();
-    },
+    }
     
     async deleteById(id: string): Promise<User> {
         const user = await userModel.findByIdAndDelete(id).lean();
@@ -41,3 +41,5 @@ export default {
         return user;
     }
 }
+
+export default new UserService();
