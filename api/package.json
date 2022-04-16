@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc && node dist/index.js",
     "dev": "nodemon -L -e ts --exec \"npm run start || exit 1\"",
-    "test": "tsc && cross-env NODE_ENV=test jest"
+    "test": "tsc && jest"
   },
   "author": "",
   "license": "ISC",
