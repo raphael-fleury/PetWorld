@@ -11,7 +11,10 @@ const config: Config.InitialOptions = {
     },
     transform: {
         "^.+\\.(ts|tsx)$": "ts-jest"
-    }
+    },
+    collectCoverage: true,
+    collectCoverageFrom: ["./src/**"],
+    coverageDirectory: "tests/_coverage"
 }
 
 export default config;
