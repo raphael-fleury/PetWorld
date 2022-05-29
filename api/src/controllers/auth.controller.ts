@@ -1,17 +1,15 @@
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
+import { Controller, Post } from "@decorators/express";
 import { AuthService } from "../services/auth.service";
 import authService from "../services/auth.service";
 
+@Controller('/')
 export class AuthController {
-    readonly uri = '/';
 
-    constructor(private service: AuthService) { }
+    constructor(private service: AuthService = authService) { }
 
-    useRoutes = (router: Router) => {
-        router.post('/login', this.login);
-    }
-
-    login = async (req: Request, res: Response) => {
+    @Post('/login')
+    async login(req: Request, res: Response) {
         const email = "" + req.body.email;
         const password = "" + req.body.password;
 

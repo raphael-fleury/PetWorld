@@ -1,43 +1,40 @@
-import { Router, Request, Response } from "express";
+import { Request, Response } from "express";
+import { Controller, Delete, Get, Patch, Post } from "@decorators/express";
 import { UserService } from "../services/user.service";
-import { Controller } from ".";
 import userService from "../services/user.service";
 import User from "../entities/user";
 
-export class UserController implements Controller {
-    readonly uri = '/users'
+@Controller('/users')
+export class UserController {
 
-    constructor(private service: UserService) { }
+    constructor(private service: UserService = userService) { }
 
-    useRoutes = (router: Router) => {
-        router.get('/', this.find);
-        router.get('/:id', this.findById);
-        router.post('/', this.create);
-        router.patch('/:id', this.edit)
-        router.delete('/:id', this.delete)
-    }
-
-    find = async (req: Request, res: Response) => {
+    @Get('/')
+    async find(req: Request, res: Response) {
         const users = await this.service.find(req.query);
         res.status(200).send(users.map(sanitize));
     }
 
-    findById = async (req: Request, res: Response) => {
+    @Get('/:id')
+    async findById(req: Request, res: Response) {
         const user = await this.service.findById(req.params.id);
         res.status(200).send(sanitize(user));
     }
 
-    create = async (req: Request, res: Response) => {
+    @Post('/')
+    async create(req: Request, res: Response) {
         const user = await this.service.create(req.body);
         res.status(200).send(sanitize(user));
     }
 
-    edit = async (req: Request, res: Response) => {
+    @Patch('/:id')
+    async edit(req: Request, res: Response) {
         const user = await this.service.edit(req.params.id, req.body);
         res.status(200).send(sanitize(user));
     }
 
-    delete = async (req: Request, res: Response) => {
+    @Delete('/:id')
+    async delete(req: Request, res: Response) {
         const user = await this.service.deleteById(req.params.id);
         res.status(200).send(sanitize(user));
     }

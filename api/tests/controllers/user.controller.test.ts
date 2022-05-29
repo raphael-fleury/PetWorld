@@ -1,6 +1,6 @@
 import { Application } from "express";
 import { createExpressApp } from "../../src/util/express-app";
-import { useController } from "../../src/controllers";
+import { getRouter } from "../../src/controllers";
 import { UserController } from "../../src/controllers/user.controller";
 import userService from "../../src/services/user.service";
 import request from "supertest";
@@ -10,8 +10,7 @@ let app: Application;
 
 beforeAll(async () => {
   app = createExpressApp();
-  const userController = new UserController(userService);
-  useController(app, userController);
+  app.use(getRouter(UserController))
 })
 
 function removePassword(user: User) {
