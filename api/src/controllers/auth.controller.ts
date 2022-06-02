@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { Controller, Post } from "@decorators/express";
 import { AuthService } from "../services/auth.service";
+import { middlewares } from "../middlewares";
 import authService from "../services/auth.service";
 
-@Controller('/')
+@Controller('/', middlewares)
 export class AuthController {
 
     constructor(private service: AuthService = authService) { }

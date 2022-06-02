@@ -1,8 +1,9 @@
-import { Router } from "express";
+import { Middleware } from "@decorators/express";
+import { NextFunction, Request, Response } from "express";
 import tokenService from "../services/token.service";
 
-export default (router: Router) => {
-    router.use(async (req, res, next) => {
+export class AuthenticationMiddleware implements Middleware {
+    async use(req: Request, res: Response, next: NextFunction) {
         const token = req.headers.authorization ?? "";
 
         if (!tokenService.isTokenExpired(token)) {
@@ -10,5 +11,5 @@ export default (router: Router) => {
         }
         
         next();
-    });
+    }
 }

@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { Controller, Delete, Get, Patch, Post } from "@decorators/express";
 import { UserService } from "../services/user.service";
+import { middlewares } from "../middlewares";
 import userService from "../services/user.service";
 import User from "../entities/user";
 
-@Controller('/users')
+@Controller('/users', middlewares)
 export class UserController {
 
     constructor(private service: UserService = userService) { }

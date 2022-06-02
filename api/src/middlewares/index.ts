@@ -1,11 +1,10 @@
-import { Router } from "express";
-import catchErrors from "./catch-errors.middleware";
-import useAuthentication from "./authentication.middleware";
+import { AuthenticationMiddleware } from "./authentication.middleware";
+import { ErrorCatchingMiddleware } from "./catch-errors.middleware";
 
-export function usePreMiddlewares(router: Router) {
-    useAuthentication(router);
-}
+export const middlewares = [
+    AuthenticationMiddleware
+]
 
-export function usePostMiddlewares(router: Router) {
-    catchErrors(router);
-}
+export const errorMiddlewares = [
+    ErrorCatchingMiddleware
+]
