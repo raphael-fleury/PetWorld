@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Controller, Delete, Get, Patch, Post } from "@decorators/express";
 import { UserService } from "../services/user.service";
-import { middlewares } from "../middlewares";
+import middlewares from "../middlewares/pre-routing";
 import userService from "../services/user.service";
 import User from "../entities/user";
 

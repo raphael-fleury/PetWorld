@@ -2,7 +2,7 @@ import asyncRouter from "../util/async-router"
 import { UserController } from "./user.controller";
 import { AuthController } from "./auth.controller";
 import { attachControllers, Type } from "@decorators/express";
-import { errorMiddlewares } from "../middlewares";
+import errorHandlers from "../middlewares/error-handling";
 
 const controllers = [
     UserController,
@@ -13,8 +13,8 @@ export function getRouter(controller: Type) {
     const router = asyncRouter();
     attachControllers(router, [controller])
 
-    errorMiddlewares.forEach(mid => {
-        router.use(new mid().use);
+    errorHandlers.forEach(handler => {
+        router.use(new handler().use);
     })
 
     return router;

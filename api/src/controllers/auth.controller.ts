@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Controller, Post } from "@decorators/express";
 import { AuthService } from "../services/auth.service";
-import { middlewares } from "../middlewares";
+import middlewares from "../middlewares/pre-routing";
 import authService from "../services/auth.service";
 
 @Controller('/', middlewares)
