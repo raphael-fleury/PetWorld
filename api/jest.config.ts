@@ -4,7 +4,7 @@ const config: Config.InitialOptions = {
     moduleFileExtensions: ['ts', 'js'],
     testMatch: [ '<rootDir>/tests/**' ],
     testPathIgnorePatterns: [
-        "/node_modules/", "/dist/"
+        "/node_modules/", "/dist/", "tests/_coverage"
     ],
     globals: {
         "NODE_ENV": "test"

@@ -1,17 +1,24 @@
+import { attachControllerInstances, attachControllers, Type } from "@decorators/express";
 import asyncRouter from "../util/async-router"
-import { UserController } from "./user.controller";
-import { AuthController } from "./auth.controller";
-import { attachControllers, Type } from "@decorators/express";
 import errorHandlers from "../middlewares/error-handling";
+import fs = require('fs');
 
-const controllers = [
-    UserController,
-    AuthController
-]
+const files = fs.readdirSync(__dirname).filter(file => file.includes('.controller'));
 
-export function getRouter(controller: Type) {
+function getControllers() {
+    return files.map(file => {
+        const module = require(`./${file.replace('.js', '')}`)
+        return module.default;
+    })
+}
+
+export function getRouter(controller: Type | object) {
     const router = asyncRouter();
-    attachControllers(router, [controller])
+
+    if (typeof controller === 'object')
+        attachControllerInstances(router, [controller])
+    else
+        attachControllers(router, [controller])
 
     errorHandlers.forEach(handler => {
         router.use(new handler().use);
@@ -21,5 +28,5 @@ export function getRouter(controller: Type) {
 }
 
 export function getRouters() {
-    return controllers.map(getRouter);
+    return getControllers().map(getRouter);
 }
