@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { Controller, Post } from "@decorators/express";
 import { AuthService } from "../services/auth.service";
-import middlewares from "../middlewares/pre-routing";
+import { AuthenticationMiddleware } from "../middlewares/pre-routing/authentication.middleware";
 import authService from "../services/auth.service";
 
-@Controller('/', middlewares)
+@Controller('/', [ AuthenticationMiddleware ])
 export class AuthController {
 
     constructor(private service: AuthService = authService) { }
@@ -15,7 +15,7 @@ export class AuthController {
         const password = "" + req.body.password;
 
         const token = await this.service.login(email, password);
-        return res.status(200).send(token);
+        return res.status(200).cookie('api-token', token).send("Logged-in successfully");
     }
 }
 
